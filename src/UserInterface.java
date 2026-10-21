@@ -9,6 +9,7 @@ public class UserInterface {
         scanner = new Scanner(System.in);
         controller = new Controller();
     }
+
     public void startProgram() {
         boolean running = true;
 
@@ -26,15 +27,27 @@ public class UserInterface {
                     running = false;
                     System.out.println("Farvel!");
                 }
-            default -> {
+                default -> {
                     System.out.println("Ukendt valg");
                 }
             }
         }
     }
-        private void createMovie() {
-            System.out.println("Titel: ");
-            String title = scanner.nextLine();
+
+    private void createMovie() {
+        System.out.println("Titel: ");
+        String title = scanner.nextLine();
+        System.out.println("Director: ");
+        String director = scanner.nextLine();
+        System.out.println("Year Created");
+        int yearCreated = scanner.nextInt();
+        System.out.println("Lenght in minutes: ");
+        int lengthInMinutes = scanner.nextInt();
+        System.out.println("Is it in color?: ");
+        boolean inColor = scanner.nextBoolean();
+        System.out.println("Genre: ");
+        String genre = scanner.nextLine();
+
 
     }
 }
