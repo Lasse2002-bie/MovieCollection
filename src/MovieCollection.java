@@ -1,40 +1,53 @@
 import java.util.ArrayList;
 
+//MovieCollection ejer selve listen med film. Det er altså her filmene faktisk bliver oprettet, fundet, ændret og slettet.
+
 public class MovieCollection {
+
+    //Listen der gemmer alle Movie-objekter i filmsamlingen
     private ArrayList<Movie> movies;
 
+    //Opretter en tom Arraylist, når en MovieCollection bliver lavet
     public MovieCollection() {
         movies = new ArrayList<>();
     }
-
+// Modtager filmens oplysninger fra controller og opretter et nyt Movie-objekt
+    //Det nye Movie-objekt bliver derefter gemt i Arraylist
     public void addMovie(String title, String director, int yearCreated, boolean inColor,
                          int lengthInMinutes, String genre) {
-        // TODO US1
+
         Movie movie = new Movie(title, director, yearCreated, inColor, lengthInMinutes, genre);
         movies.add(movie);
     }
 
+//Returnerer listen af film til Controller, som kan sende den videre til UI
     public ArrayList<Movie> getMovies() {
-
-        return movies;   // TODO US3
+        return movies;
     }
 
+    //Returnerer hvor mange film der ligger i samlingen
     public int getNumberOfMovies() {
         return movies.size();      // TODO
     }
-// Finder alle film, hvor søgeteksten indgår i titlen - uanset store og små bogstaver
+
+    //Søger gennem alle film og gemmer de film, hvor søgetekst indgår i titlen
+    //toLowerCase gør at søgning ikke afhænger af stor og små
     public ArrayList<Movie> searchMovies(String searchText) {
         ArrayList<Movie> matches = new ArrayList<>();
         String text = searchText.toLowerCase();
+
         for (Movie movie : movies) {
             if (movie.getTitle().toLowerCase().contains(text)) {
                 matches.add(movie);
             }
         }
+
+        //Sender listen med søgeresultater til Controller
         return matches;
-            // TODO US4
     }
 
+    //Modtager den valgte film og de nye oplysninger fra Controller
+    //Hvis filmen findes i samlingen, ændres dens værdier gennem setter
     public boolean editMovie(Movie movie, String title, String director, int yearCreated,
                              boolean inColor, int lengthInMinutes, String genre) {
 
@@ -46,11 +59,15 @@ public class MovieCollection {
             movie.setLengthInMinutes(lengthInMinutes);
             movie.setGenre(genre);
 
+            //true fortæller controller at redigering virkede
             return true;
         }
-        return false;  // TODO US5
+
+        // false betyder at filmen ikke blev fundet i samling
+        return false;
     }
 
+    //Fjerner den valgte Movie-objekt fra listen og returnerer om det virkede
     public boolean deleteMovie(Movie movie) {
         return movies.remove(movie);
         // TODO US6

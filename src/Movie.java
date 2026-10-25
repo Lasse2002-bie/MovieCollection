@@ -1,4 +1,6 @@
 public class Movie{
+
+    //Variabler der gemmer oplysninger om én film
     private String title;
     private String director;
     private int yearCreated;
@@ -6,9 +8,12 @@ public class Movie{
     private int lengthInMinutes;
     private String genre;
 
+
+    //Constructor der opretter et Movie-objekt med alle filmens oplysninger
     public Movie(String title, String director, int yearCreated, boolean inColor,
                  int lengthInMinutes, String genre) {
 
+        //this henviser til objektets egne variabler
         this.title = title;
         this.director = director;
         this.yearCreated = yearCreated;
@@ -16,10 +21,13 @@ public class Movie{
         this.lengthInMinutes = lengthInMinutes;
         this.genre = genre;
     }
+
+    //Getters burger til at hende filmens oplysninger
     public String getTitle() {
         return title;
     }
 
+    //Setters bruges til at ændre filmens oplysninger
     public void setTitle(String title) {
         this.title = title;
     }
