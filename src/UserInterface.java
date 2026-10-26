@@ -25,6 +25,7 @@ public class UserInterface {
             System.out.println("3. Søg efter film");
             System.out.println("4. Redigér en film");
             System.out.println("5. Slet en film");
+            System.out.println("6. Markér en film som set i dag");
             System.out.println("7. Find film du ikke har set i et vist antal dage");
             System.out.println("0. Afslut");
             System.out.println("Vælg: ");
@@ -38,7 +39,7 @@ public class UserInterface {
                 case "3" -> searchMovies();
                 case "4" -> editMovie();
                 case "5" -> deleteMovie();
-
+                case "6" -> markMovieAsWatched();
                 case "7" -> getMoviesNotWatchedForDays();
 
                 //Sætter running til false, så while-løkke og program stopper
@@ -278,6 +279,34 @@ public class UserInterface {
         } else {
             System.out.println("Filmen blev ikke slettet.");
         }
+    }
+    // Søger efter den film brugeren vil markere som set
+    private void markMovieAsWatched() {
+        System.out.println("Søg efter filmen du vil markere som set");
+        String searchText = scanner.nextLine();
+
+        ArrayList<Movie> matches = controller.searchMovies(searchText);
+
+        if (matches.isEmpty()) {
+            System.out.println("Ingen film matcher din søgning");
+            return;
+        }
+
+        // Viser søgeresultaterne med numre
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + ". " + matches.get(i).getTitle());
+        }
+
+        System.out.println("Vælg nummer: ");
+        int number = Integer.parseInt(scanner.nextLine());
+
+        // Henter den film brugeren valgte
+        Movie selectedMovie = matches.get(number - 1);
+
+        // Sender filmen til Controller, som markerer den som set i dag
+        controller.markAsWatched(selectedMovie);
+
+        System.out.println(selectedMovie.getTitle() + " er markeret som set i dag");
     }
 
     private void getMoviesNotWatchedForDays() {
