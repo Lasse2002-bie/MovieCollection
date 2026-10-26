@@ -25,6 +25,7 @@ public class UserInterface {
             System.out.println("3. Søg efter film");
             System.out.println("4. Redigér en film");
             System.out.println("5. Slet en film");
+            System.out.println("7. Find film du ikke har set i et vist antal dage");
             System.out.println("0. Afslut");
             System.out.println("Vælg: ");
 
@@ -37,6 +38,8 @@ public class UserInterface {
                 case "3" -> searchMovies();
                 case "4" -> editMovie();
                 case "5" -> deleteMovie();
+
+                case "7" -> getMoviesNotWatchedForDays();
 
                 //Sætter running til false, så while-løkke og program stopper
                 case "0" -> {
@@ -98,7 +101,7 @@ public class UserInterface {
             //Viser boolean-værdien som farver eller sort-hvis i stedet for true/false
             if (movie.isInColor()) {
                 System.out.println("farver");
-            }else {
+            } else {
                 System.out.println("sort-hvid");
             }
         }
@@ -127,7 +130,7 @@ public class UserInterface {
 
             if (movie.isInColor()) {
                 System.out.println("farver");
-            }else {
+            } else {
                 System.out.println("sort-hvid");
             }
         }
@@ -242,7 +245,7 @@ public class UserInterface {
         System.out.println("Søg efter filmen du vil slette ");
         String searchText = scanner.nextLine();
 
-        ArrayList <Movie> matches = controller.searchMovies(searchText);
+        ArrayList<Movie> matches = controller.searchMovies(searchText);
 
         if (matches.isEmpty()) {
             System.out.println("Ingen film matcher din søgning");
@@ -254,26 +257,55 @@ public class UserInterface {
 
         }
 
-            System.out.println("Vælg nummer: ");
-            int number = Integer.parseInt(scanner.nextLine());
+        System.out.println("Vælg nummer: ");
+        int number = Integer.parseInt(scanner.nextLine());
 
-            //Henter den film brugeren valgte fra søgeresultaterne
-            Movie selectedMovie = matches.get(number - 1);
+        //Henter den film brugeren valgte fra søgeresultaterne
+        Movie selectedMovie = matches.get(number - 1);
 
-            System.out.println("Vil du slette " + selectedMovie.getTitle() + "? (ja/nej): ");
-            String confirm = scanner.nextLine();
+        System.out.println("Vil du slette " + selectedMovie.getTitle() + "? (ja/nej): ");
+        String confirm = scanner.nextLine();
 
 
-            //Sletter kun filmen hvis brugeren svarer ja
-            if (confirm.equalsIgnoreCase("ja")) {
+        //Sletter kun filmen hvis brugeren svarer ja
+        if (confirm.equalsIgnoreCase("ja")) {
 
-                //Controller sender Movie-objekt videre til MovieCollection,
-                //Som fjerner det fra Arraylisten
-                controller.deleteMovie(selectedMovie);
+            //Controller sender Movie-objekt videre til MovieCollection,
+            //Som fjerner det fra Arraylisten
+            controller.deleteMovie(selectedMovie);
 
-                System.out.println("Filmen er slettet.");
+            System.out.println("Filmen er slettet.");
+        } else {
+            System.out.println("Filmen blev ikke slettet.");
+        }
+    }
+
+    private void getMoviesNotWatchedForDays() {
+        System.out.println("Antal dage: ");
+        int days = scanner.nextInt();
+
+        //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
+        ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
+
+        if (matches.isEmpty()) {
+            System.out.println("Ingen film matcher din søgning");
+        }
+
+        //Går gennem alle søgeresultater og viser filmens oplysninger
+        for (Movie movie : matches) {
+            System.out.println(movie.getTitle());
+            System.out.println(movie.getDirector());
+            System.out.println(movie.getYearCreated());
+            System.out.println(movie.getGenre());
+            System.out.println(movie.getLengthInMinutes());
+
+            if (movie.isInColor()) {
+                System.out.println("I farve");
             } else {
-                System.out.println("Filmen blev ikke slettet.");
+                System.out.println("I sort-hvid");
             }
         }
     }
+
+
+}

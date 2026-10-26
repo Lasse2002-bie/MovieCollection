@@ -12,7 +12,7 @@ public class Controller {
 
     //Modtager filmens oplysninger fra UI og sender videre til MovieCollection
     public void addMovie(String title, String director, int yearCreated,
-                         boolean inColor, int lengthInMinutes, String genre, LocalDate lastSeen) {
+                         boolean inColor, int lengthInMinutes, String genre) {
 
         movieCollection.addMovie(title, director, yearCreated,
                 inColor, lengthInMinutes, genre);
@@ -32,7 +32,7 @@ public class Controller {
     //Returnerer true eller false alt efter om redigeringen virkede
     public boolean editMovie(Movie movie, String title, String director,
                              int yearCreated, boolean inColor,
-                             int lengthInMinutes, String genre, LocalDate lastSeen) {
+                             int lengthInMinutes, String genre) {
 
         return movieCollection.editMovie(movie, title, director, yearCreated,
                 inColor, lengthInMinutes, genre);
