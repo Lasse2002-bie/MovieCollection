@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.time.LocalDate;
 public class Controller {
 
     //Forbindelse til MovieCollection, hvor selve filmsamling ligger
@@ -12,7 +12,7 @@ public class Controller {
 
     //Modtager filmens oplysninger fra UI og sender videre til MovieCollection
     public void addMovie(String title, String director, int yearCreated,
-                         boolean inColor, int lengthInMinutes, String genre) {
+                         boolean inColor, int lengthInMinutes, String genre, LocalDate lastSeen) {
 
         movieCollection.addMovie(title, director, yearCreated,
                 inColor, lengthInMinutes, genre);
@@ -32,7 +32,7 @@ public class Controller {
     //Returnerer true eller false alt efter om redigeringen virkede
     public boolean editMovie(Movie movie, String title, String director,
                              int yearCreated, boolean inColor,
-                             int lengthInMinutes, String genre) {
+                             int lengthInMinutes, String genre, LocalDate lastSeen) {
 
         return movieCollection.editMovie(movie, title, director, yearCreated,
                 inColor, lengthInMinutes, genre);
@@ -42,4 +42,21 @@ public class Controller {
     public boolean deleteMovie(Movie movie) {
         return movieCollection.deleteMovie(movie);
     }
+
+    public void markAsWatched(Movie movie){
+        movie.markAsWatched(LocalDate.now());
+
+    }
+    //Tager antal dage og ser hvilke film man har set indenfor det tidsrum.
+    public ArrayList<Movie> getMoviesNotWatchedForDays(int days) {
+        LocalDate limit = LocalDate.now().minusDays(days);
+        return movieCollection.getMoviesNotWatchedSince(limit);
+
+    }
+
+
+
+
+
+
 }

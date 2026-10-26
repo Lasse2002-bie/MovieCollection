@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 //MovieCollection ejer selve listen med film. Det er altså her filmene faktisk bliver oprettet, fundet, ændret og slettet.
@@ -72,4 +73,15 @@ public class MovieCollection {
         return movies.remove(movie);
         // TODO US6
     }
+    //Laver en liste af Movies, som ikke er set endnu.
+    public ArrayList<Movie> getMoviesNotWatchedSince(LocalDate date)
+    {ArrayList<Movie> result = new ArrayList<>();
+        for (Movie movie : movies) {
+            if (!movie.hasBeenWatched() || movie.getLastWatched().isBefore(date)) {
+                result.add(movie);
+            }
+        }
+        return result;
+    }
+
 }

@@ -1,4 +1,7 @@
-public class Movie{
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+public class Movie {
 
     //Variabler der gemmer oplysninger om én film
     private String title;
@@ -7,6 +10,7 @@ public class Movie{
     private boolean inColor;
     private int lengthInMinutes;
     private String genre;
+    private LocalDate lastWatched;
 
 
     //Constructor der opretter et Movie-objekt med alle filmens oplysninger
@@ -31,6 +35,7 @@ public class Movie{
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getDirector() {
         return director;
     }
@@ -71,5 +76,19 @@ public class Movie{
         this.genre = genre;
     }
 
-}
+    public LocalDate getLastWatched() {
+        return lastWatched;
+    }
 
+    public boolean hasBeenWatched() {
+        return lastWatched != null;
+    }
+
+    public void markAsWatched(LocalDate date) {
+        lastWatched = date;
+    }
+
+    public long getDaysSinceWatched(LocalDate today) {
+        return ChronoUnit.DAYS.between(lastWatched, today);
+    }
+}
