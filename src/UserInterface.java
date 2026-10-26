@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 public class UserInterface {
 
@@ -91,6 +93,7 @@ public class UserInterface {
             return;
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         //Går gennem alle film i listen og viser oplysningerne om hver film
         for (Movie movie : movies) {
             System.out.println(movie.getTitle());
@@ -105,8 +108,14 @@ public class UserInterface {
             } else {
                 System.out.println("sort-hvid");
             }
-        }
+            if (movie.hasBeenWatched()) {
+                long days = controller.getDaysSinceWatched(movie);
+                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter) +  " (for " + days + " dage siden)");
 
+            } else {
+                System.out.println("Sidst set: aldrig");
+            }
+        }
     }
 
     //Læser en søgetekst og sender den gennem Controller til MovieCollection
@@ -121,6 +130,8 @@ public class UserInterface {
             System.out.println("Ingen film matcher din søgning");
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
         //Går gennem alle søgeresultater og viser filmens oplysninger
         for (Movie movie : matches) {
             System.out.println(movie.getTitle());
@@ -133,6 +144,15 @@ public class UserInterface {
                 System.out.println("farver");
             } else {
                 System.out.println("sort-hvid");
+            }
+
+            if (movie.hasBeenWatched()) {
+                long days = controller.getDaysSinceWatched(movie);
+
+                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter)
+                        + " (for " + days + " dage siden)");
+            } else {
+                System.out.println("Sidst set: aldrig");
             }
         }
     }
@@ -227,6 +247,9 @@ public class UserInterface {
                 newGenre);
 
         System.out.println("Filmen er opdateret");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
         System.out.println(selectedMovie.getTitle());
         System.out.println(selectedMovie.getDirector());
         System.out.println(selectedMovie.getYearCreated());
@@ -237,6 +260,14 @@ public class UserInterface {
             System.out.println("farver");
         } else {
             System.out.println("sort/hvid");
+        }
+        if (selectedMovie.hasBeenWatched()) {
+            long days = controller.getDaysSinceWatched(selectedMovie);
+
+            System.out.println("Sidst set: " + selectedMovie.getLastWatched().format(formatter)
+                    + " (for " + days + " dage siden)");
+        } else {
+            System.out.println("Sidst set: aldrig");
         }
 
     }
@@ -311,7 +342,7 @@ public class UserInterface {
 
     private void getMoviesNotWatchedForDays() {
         System.out.println("Antal dage: ");
-        int days = scanner.nextInt();
+        int days = Integer.parseInt(scanner.nextLine());
 
         //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
         ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
@@ -319,6 +350,8 @@ public class UserInterface {
         if (matches.isEmpty()) {
             System.out.println("Ingen film matcher din søgning");
         }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         //Går gennem alle søgeresultater og viser filmens oplysninger
         for (Movie movie : matches) {
@@ -332,6 +365,14 @@ public class UserInterface {
                 System.out.println("I farve");
             } else {
                 System.out.println("I sort-hvid");
+            }
+            if (movie.hasBeenWatched()) {
+                long daysSinceWatched = controller.getDaysSinceWatched(movie);
+
+                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter)
+                        + " (for " + daysSinceWatched + " dage siden)");
+            } else {
+                System.out.println("Sidst set: aldrig");
             }
         }
     }

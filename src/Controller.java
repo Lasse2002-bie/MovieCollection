@@ -47,6 +47,9 @@ public class Controller {
         movie.markAsWatched(LocalDate.now());
 
     }
+    public long getDaysSinceWatched(Movie movie) {
+        return movie.getDaysSinceWatched(LocalDate.now());
+    }
     //Tager antal dage og ser hvilke film man har set indenfor det tidsrum.
     public ArrayList<Movie> getMoviesNotWatchedForDays(int days) {
         LocalDate limit = LocalDate.now().minusDays(days);
