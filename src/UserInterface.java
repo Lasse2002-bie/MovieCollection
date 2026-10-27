@@ -311,22 +311,21 @@ public class UserInterface {
     }
 
     private void getMoviesNotWatchedForDays() {
-           System.out.println("Antal dage: ");
-          int days;
-          try {
-              days = Integer.parseInt(scanner.nextLine());
-          }
-            catch(InputMismatchException e)
-            {
-                System.out.println("Fejl. Kun skriv tal.");
-                return;
-            }
-          catch(NumberFormatException e)
-          {
-              System.out.println("Fejl. Kun skriv tal.");
-              return;
-          }
 
+          int days = 0;
+          boolean validInput = false;
+
+          while(!validInput) {
+              System.out.println("Antal dage: ");
+              try {
+                  days = Integer.parseInt(scanner.nextLine());
+                  validInput=true;
+              }  catch (NumberFormatException e) {
+                  System.out.println("Fejl. Kun skriv tal.");
+
+              }
+
+          }
            //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
            ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
 
