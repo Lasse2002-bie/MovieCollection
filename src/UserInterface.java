@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -310,11 +311,25 @@ public class UserInterface {
     }
 
     private void getMoviesNotWatchedForDays() {
-        System.out.println("Antal dage: ");
-        int days = scanner.nextInt();
+           System.out.println("Antal dage: ");
+          int days;
+          try {
+              days = Integer.parseInt(scanner.nextLine());
+          }
+            catch(InputMismatchException e)
+            {
+                System.out.println("Fejl. Kun skriv tal.");
+                return;
+            }
+          catch(NumberFormatException e)
+          {
+              System.out.println("Fejl. Kun skriv tal.");
+              return;
+          }
 
-        //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
-        ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
+           //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
+           ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
+
 
         if (matches.isEmpty()) {
             System.out.println("Ingen film matcher din søgning");
