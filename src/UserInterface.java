@@ -1,8 +1,6 @@
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Date;
-import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class UserInterface {
 
