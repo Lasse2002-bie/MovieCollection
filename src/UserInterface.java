@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Date;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
@@ -344,8 +345,23 @@ public class UserInterface {
         System.out.println("Antal dage: ");
         int days = Integer.parseInt(scanner.nextLine());
 
-        //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
-        ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
+          int days = 0;
+          boolean validInput = false;
+
+          while(!validInput) {
+              System.out.println("Antal dage: ");
+              try {
+                  days = Integer.parseInt(scanner.nextLine());
+                  validInput=true;
+              }  catch (NumberFormatException e) {
+                  System.out.println("Fejl. Kun skriv tal.");
+
+              }
+
+          }
+           //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
+           ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
+
 
         if (matches.isEmpty()) {
             System.out.println("Ingen film matcher din søgning");
