@@ -70,8 +70,7 @@ public class UserInterface {
 
         int lengthInMinutes = readInt("Length in minutes: ");
 
-        System.out.println("Is it in color?: ");
-        boolean inColor = Boolean.parseBoolean(scanner.nextLine());
+        boolean inColor = readYesNo("I farver (ja/nej");
 
         System.out.println("Genre: ");
         String genre = scanner.nextLine();
@@ -109,7 +108,7 @@ public class UserInterface {
             }
             if (movie.hasBeenWatched()) {
                 long days = controller.getDaysSinceWatched(movie);
-                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter) +  " (for " + days + " dage siden)");
+                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter) + " (for " + days + " dage siden)");
 
             } else {
                 System.out.println("Sidst set: aldrig");
@@ -174,7 +173,14 @@ public class UserInterface {
         }
 
         int number = readInt("Vælg nummer: ");
+        while (number < 0 || number > matches.size()) {
+            System.out.println("Vælg et nummer mellem 1 og " + matches.size() + " - eller 0 for at fortryde.");
+            number = readInt("Vælg nummer: ");
+        }
 
+        if (number == 0) {
+            return;
+        }
         //-1 bruges fordi Arraylist starter på index 0, mens brugeren vælger fra 1
         Movie selectedMovie = matches.get(number - 1);
 
@@ -193,38 +199,14 @@ public class UserInterface {
             newDirector = selectedMovie.getDirector();
         }
 
-        System.out.println("Year Created [" + selectedMovie.getYearCreated() + "]: ");
-        String yearInput = scanner.nextLine();
+        int newYearCreated = readIntOrKeep("Year Created [" + selectedMovie.getYearCreated() + "] ", selectedMovie.getYearCreated());
 
-        int newYearCreated;
+        boolean newInColor = readYesNoOrKeep(
+                "I farver (ja/nej) [" + selectedMovie.isInColor() + "]: ",
+                selectedMovie.isInColor());
 
-        if (yearInput.isEmpty()) {
-            newYearCreated = selectedMovie.getYearCreated();
-        } else {
-            newYearCreated = Integer.parseInt(yearInput);
-        }
+        int newLengthInMinutes = readIntOrKeep("Length in minutes [" + selectedMovie.getLengthInMinutes() + "]: ", selectedMovie.getLengthInMinutes());
 
-        System.out.println("I farver (true/false) [" + selectedMovie.isInColor() + "]: ");
-        String colorInput = scanner.nextLine();
-
-        boolean newInColor;
-
-        if (colorInput.isEmpty()) {
-            newInColor = selectedMovie.isInColor();
-        } else {
-            newInColor = Boolean.parseBoolean(colorInput);
-        }
-
-        System.out.println("Length in minutes [" + selectedMovie.getLengthInMinutes() + "]: ");
-        String lengthInput = scanner.nextLine();
-
-        int newLengthInMinutes;
-
-        if (lengthInput.isEmpty()) {
-            newLengthInMinutes = selectedMovie.getLengthInMinutes();
-        } else {
-            newLengthInMinutes = Integer.parseInt(lengthInput);
-        }
 
         System.out.println("Genre [" + selectedMovie.getGenre() + "]: ");
         String newGenre = scanner.nextLine();
@@ -287,19 +269,22 @@ public class UserInterface {
 
         }
 
-        System.out.println("Vælg nummer: ");
-        int number = Integer.parseInt(scanner.nextLine());
+        int number = readInt("Vælg nummer: ");
+
+        while (number < 0 || number > matches.size()) {
+            System.out.println("Vælg et nummer mellem 1 og " + matches.size() + " - eller 0 for at fortryde. ");
+            number = readInt("Vælg nummer: ");
+        }
+        if (number == 0) {
+            return;
+        }
 
         //Henter den film brugeren valgte fra søgeresultaterne
         Movie selectedMovie = matches.get(number - 1);
 
-        System.out.println("Vil du slette " + selectedMovie.getTitle() + "? (ja/nej): ");
-        String confirm = scanner.nextLine();
+        boolean confirm = readYesNo("Vil du slette " + selectedMovie.getTitle() + "? (ja/nej): ");
 
-
-        //Sletter kun filmen hvis brugeren svarer ja
-        if (confirm.equalsIgnoreCase("ja")) {
-
+        if (confirm) {
             //Controller sender Movie-objekt videre til MovieCollection,
             //Som fjerner det fra Arraylisten
             controller.deleteMovie(selectedMovie);
@@ -309,6 +294,7 @@ public class UserInterface {
             System.out.println("Filmen blev ikke slettet.");
         }
     }
+
     // Søger efter den film brugeren vil markere som set
     private void markMovieAsWatched() {
         System.out.println("Søg efter filmen du vil markere som set");
@@ -326,8 +312,14 @@ public class UserInterface {
             System.out.println((i + 1) + ". " + matches.get(i).getTitle());
         }
 
-        System.out.println("Vælg nummer: ");
-        int number = Integer.parseInt(scanner.nextLine());
+        int number = readInt("Vælg nummer: ");
+
+        while (number < 0 || number > matches.size()) {
+            System.out.println("Vælg et nummer mellem 1 og " + matches.size() + " - eller 0 for at fortryde.");
+        }
+        if (number == 0) {
+            return;
+        }
 
         // Henter den film brugeren valgte
         Movie selectedMovie = matches.get(number - 1);
@@ -340,22 +332,10 @@ public class UserInterface {
 
     private void getMoviesNotWatchedForDays() {
 
-          int days = 0;
-          boolean validInput = false;
+        int days = readInt("Antal dage: ");
 
-          while(!validInput) {
-              System.out.println("Antal dage: ");
-              try {
-                  days = Integer.parseInt(scanner.nextLine());
-                  validInput=true;
-              }  catch (NumberFormatException e) {
-                  System.out.println("Fejl. Kun skriv tal.");
-
-              }
-
-          }
-           //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
-           ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
+        //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
+        ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
 
 
         if (matches.isEmpty()) {
@@ -387,6 +367,7 @@ public class UserInterface {
             }
         }
     }
+
     private int readInt(String prompt) {
         while (true) {
             System.out.println(prompt);
@@ -398,6 +379,54 @@ public class UserInterface {
                 System.out.println("\"" + input + "\" er ikke et helt tal. Prøv igen.");
             }
         }
+    }
 
+    private boolean readYesNo(String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("ja") || input.equalsIgnoreCase("j")) {
+                return true;
+            }
+
+            if (input.equalsIgnoreCase("nej") || input.equalsIgnoreCase("n")) {
+                return false;
+            }
+            System.out.println("Svar ja eller nej.");
+        }
+    }
+
+    private int readIntOrKeep(String prompt, int oldValue) {
+        while (true) {
+            System.out.println(prompt);
+            String input = scanner.nextLine().trim();
+
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("\"" + input + "\" er ikke et helt tal. Prøv igen.");
+            }
+
+        }
+    }
+
+    private boolean readYesNoOrKeep(String prompt, boolean oldValue) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                return oldValue;
+            }
+
+            if (input.equalsIgnoreCase("ja") || input.equalsIgnoreCase("j")) {
+                return true;
+            }
+            if (input.equalsIgnoreCase("nej") || input.equalsIgnoreCase("n")) {
+                return false;
+            }
+            System.out.println("Svar ja eller nej.");
+        }
     }
 }
