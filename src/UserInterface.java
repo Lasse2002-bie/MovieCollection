@@ -65,12 +65,10 @@ public class UserInterface {
         System.out.println("Director: ");
         String director = scanner.nextLine();
 
-        System.out.println("Year Created");
         //parseInt omdanner brugeres tekst-input til et int
-        int yearCreated = Integer.parseInt(scanner.nextLine());
+        int yearCreated = readInt("Year Created ");
 
-        System.out.println("Lenght in minutes: ");
-        int lengthInMinutes = Integer.parseInt(scanner.nextLine());
+        int lengthInMinutes = readInt("Length in minutes: ");
 
         System.out.println("Is it in color?: ");
         boolean inColor = Boolean.parseBoolean(scanner.nextLine());
@@ -175,8 +173,7 @@ public class UserInterface {
             System.out.println((i + 1) + ". " + matches.get(i).getTitle());
         }
 
-        System.out.println("Vælg nummer: ");
-        int number = Integer.parseInt(scanner.nextLine());
+        int number = readInt("Vælg nummer: ");
 
         //-1 bruges fordi Arraylist starter på index 0, mens brugeren vælger fra 1
         Movie selectedMovie = matches.get(number - 1);
@@ -342,8 +339,6 @@ public class UserInterface {
     }
 
     private void getMoviesNotWatchedForDays() {
-        System.out.println("Antal dage: ");
-        int days = Integer.parseInt(scanner.nextLine());
 
           int days = 0;
           boolean validInput = false;
@@ -392,6 +387,17 @@ public class UserInterface {
             }
         }
     }
+    private int readInt(String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            String input = scanner.nextLine().trim();
 
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("\"" + input + "\" er ikke et helt tal. Prøv igen.");
+            }
+        }
 
+    }
 }
