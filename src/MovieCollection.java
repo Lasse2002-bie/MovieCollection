@@ -53,6 +53,7 @@ public class MovieCollection {
                              boolean inColor, int lengthInMinutes, String genre) {
 
         if (movies.contains(movie)) {
+            Movie tempMovie = new Movie (title, director, yearCreated, inColor, lengthInMinutes, genre);
             movie.setTitle(title);
             movie.setDirector(director);
             movie.setYearCreated(yearCreated);

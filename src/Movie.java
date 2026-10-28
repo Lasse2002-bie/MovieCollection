@@ -1,7 +1,9 @@
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+
 public class Movie {
+    private static final int FIRST_MOVIE_YEAR = 1888;
 
     //Variabler der gemmer oplysninger om én film
     private String title;
@@ -18,12 +20,12 @@ public class Movie {
                  int lengthInMinutes, String genre) {
 
         //this henviser til objektets egne variabler
-        this.title = title;
-        this.director = director;
-        this.yearCreated = yearCreated;
-        this.inColor = inColor;
-        this.lengthInMinutes = lengthInMinutes;
-        this.genre = genre;
+        setTitle(title);
+        setDirector(director);
+        setGenre(genre);
+        setYearCreated(yearCreated);
+        setLengthInMinutes(lengthInMinutes);
+        setInColor(inColor);
     }
 
     //Getters burger til at hende filmens oplysninger
@@ -33,6 +35,9 @@ public class Movie {
 
     //Setters bruges til at ændre filmens oplysninger
     public void setTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Titel må ikke være tom");
+        }
         this.title = title;
     }
 
@@ -41,6 +46,9 @@ public class Movie {
     }
 
     public void setDirector(String director) {
+        if (director == null || director.trim().isEmpty()) {
+            throw new IllegalArgumentException("Director må ikke være tom");
+        }
         this.director = director;
     }
 
@@ -49,6 +57,9 @@ public class Movie {
     }
 
     public void setYearCreated(int yearCreated) {
+        if (yearCreated < FIRST_MOVIE_YEAR || yearCreated > LocalDate.now().getYear()+1) {
+            throw new IllegalArgumentException("Årstallet skal være mellem 1888 og næste år");
+        }
         this.yearCreated = yearCreated;
     }
 
@@ -65,6 +76,9 @@ public class Movie {
     }
 
     public void setLengthInMinutes(int lengthInMinutes) {
+        if (lengthInMinutes < 1) {
+            throw new IllegalArgumentException("Filmen skal være mindst 1 minut lang");
+        }
         this.lengthInMinutes = lengthInMinutes;
     }
 
@@ -73,6 +87,9 @@ public class Movie {
     }
 
     public void setGenre(String genre) {
+        if (genre == null || genre.trim().isEmpty()) {
+            throw new IllegalArgumentException("Genre må ikke være tom");
+        }
         this.genre = genre;
     }
 

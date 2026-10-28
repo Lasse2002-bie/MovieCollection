@@ -75,8 +75,12 @@ public class UserInterface {
 
         //Sender alle oplysninger videre til Controller, som sender dem til MovieCollection
         //MovieCollection opretter Movie-objektet og gemmer det i listen
-        controller.addMovie(title, director, yearCreated, inColor, lengthInMinutes, genre);
-        System.out.println(title + " er tilføjet til filmsamlingen");
+        try {
+            controller.addMovie(title, director, yearCreated, inColor, lengthInMinutes, genre);
+            System.out.println(title + " er tilføjet til filmsamlingen");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Filmen blev ikke oprettet: " + e.getMessage());
+        }
     }
 
     //Henter alle film gennem Controller
@@ -215,16 +219,20 @@ public class UserInterface {
 
         //Sender den valgte film og de nye værdier til Controller
         //Controller sender dem videre til MovieCollection, som ændrer Movie-objektet
-        controller.editMovie(
-                selectedMovie,
-                newTitle,
-                newDirector,
-                newYearCreated,
-                newInColor,
-                newLengthInMinutes,
-                newGenre);
+        try {
+            controller.editMovie(
+                    selectedMovie,
+                    newTitle,
+                    newDirector,
+                    newYearCreated,
+                    newInColor,
+                    newLengthInMinutes,
+                    newGenre);
+            System.out.println("Filmen er opdateret");
 
-        System.out.println("Filmen er opdateret");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Filmen blev ikke opdateret: " + e.getMessage());
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
