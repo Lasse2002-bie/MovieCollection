@@ -1,6 +1,8 @@
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class UserInterface {
 
@@ -9,6 +11,9 @@ public class UserInterface {
 
     //Controller forbinder UI med resten af programmet.
     private Controller controller;
+
+    //Formatterer dato input fra brugeren.
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     //Opretter scanner og controller når UI oprettes
     public UserInterface() {
@@ -26,7 +31,7 @@ public class UserInterface {
             System.out.println("3. Søg efter film");
             System.out.println("4. Redigér en film");
             System.out.println("5. Slet en film");
-            System.out.println("6. Markér en film som set i dag");
+            System.out.println("6. Markér en film som set");
             System.out.println("7. Find film du ikke har set i et vist antal dage");
             System.out.println("0. Afslut");
             System.out.println("Vælg: ");
@@ -64,7 +69,20 @@ public class UserInterface {
         String director = scanner.nextLine();
 
         //parseInt omdanner brugeres tekst-input til et int
-        int yearCreated = readInt("Year Created ");
+        int yearCreated = 0;
+        boolean validInput = false;
+        while (!validInput){
+            yearCreated = readInt("Year Created: ");
+            try {
+                  Movie.validateYearCreated(yearCreated);
+                  validInput=true;
+            }
+            catch(IllegalArgumentException e){
+               System.out.println(e.getMessage() + " Prøv igen.");
+            }
+             
+
+        }
 
         int lengthInMinutes = readInt("Length in minutes: ");
 
@@ -322,6 +340,7 @@ public class UserInterface {
 
         while (number < 0 || number > matches.size()) {
             System.out.println("Vælg et nummer mellem 1 og " + matches.size() + " - eller 0 for at fortryde.");
+            number = readInt("Vælg nummer: ");
         }
         if (number == 0) {
             return;
@@ -329,11 +348,21 @@ public class UserInterface {
 
         // Henter den film brugeren valgte
         Movie selectedMovie = matches.get(number - 1);
+         boolean validDate = false;
 
-        // Sender filmen til Controller, som markerer den som set i dag
-        controller.markAsWatched(selectedMovie);
+                 while(!validDate) {
+                     LocalDate date = readDate("Hvornår så du den? (dd-mm-åååå, Enter = i dag): ");
 
-        System.out.println(selectedMovie.getTitle() + " er markeret som set i dag");
+                     try {
+                         // Sender filmen til Controller, som markerer den som set i den valgte dato.
+                         controller.markAsWatched(selectedMovie, date);
+
+                         System.out.println(selectedMovie.getTitle() + " er markeret som set den: " + date.format(dateFormatter));
+                         validDate = true;
+                     } catch (IllegalArgumentException e) {
+                         System.out.println("Filmen blev ikke markeret: " + e.getMessage() + " Prøv igen.");
+                     }
+                 }
     }
 
     private void getMoviesNotWatchedForDays() {
@@ -383,6 +412,21 @@ public class UserInterface {
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 System.out.println("\"" + input + "\" er ikke et helt tal. Prøv igen.");
+            }
+        }
+    }
+
+    private LocalDate readDate(String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                return LocalDate.now();
+            }
+            try {
+                return LocalDate.parse(input, dateFormatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("\"" + input + "\" er ikke en dato på formen: dd-mm-åååå");
             }
         }
     }
