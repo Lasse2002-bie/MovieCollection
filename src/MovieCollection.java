@@ -85,4 +85,9 @@ public class MovieCollection {
         return result;
     }
 
+    //Tilføjer en allerede oprettet Movie til samlingen
+    public void addMovie (Movie movie) {
+        movies.add(movie);
+    }
+
 }

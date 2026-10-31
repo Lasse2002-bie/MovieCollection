@@ -1,5 +1,7 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.io.FileNotFoundException;
 public class Controller {
 
     //Forbindelse til MovieCollection, hvor selve filmsamling ligger
@@ -7,7 +9,11 @@ public class Controller {
 
     //Opretter en MovieCollection, når Controller bliver oprettet
     public Controller() {
+
         movieCollection = new MovieCollection();
+
+        //Opretter Filehandler og fortæller hvilken fil den skal bruge
+        fileHandler = new FileHandler("movies.csv");
     }
 
     //Modtager filmens oplysninger fra UI og sender videre til MovieCollection
@@ -49,7 +55,34 @@ public class Controller {
     }
 
     public long getDaysSinceWatched(Movie movie) {
+
         return movie.getDaysSinceWatched(LocalDate.now());
+    }
+
+    //Håndterer gemning og indlæsning af film fra CSV filen
+    private FileHandler fileHandler;
+
+    //Indlæser film fra CSV filen
+    public int loadMovies() throws FileNotFoundException {
+        //henter de indlæste film fra fileHandler
+        ArrayList<Movie> loadedMovies = fileHandler.loadMovies();
+
+        //Tilføjer alle indlæste film til MovieCollection
+        for (Movie movie : loadedMovies) {
+            movieCollection.addMovie(movie);
+        }
+        //Returnerer antal indlæste film
+        return loadedMovies.size();
+    }
+
+    //Henter antal ugyldige linjer fra FileHandler
+    public int getSkippedLineCount() {
+        return fileHandler.getSkippedLineCount();
+    }
+
+    //Gemmer alle film fra MovieCollection i CSV filen
+    public void saveMovies() throws FileNotFoundException {
+        fileHandler.saveMovies(movieCollection.getMovies());
     }
 
     //Tager antal dage og ser hvilke film man har set indenfor det tidsrum.

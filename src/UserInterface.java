@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,6 +19,9 @@ public class UserInterface {
 
     //Starter programmet og viser menuen igen, så længe running er true
     public void startProgram() {
+
+        //Indlæseer gemte film fra movies.csv når programmet starter
+        loadMovies();
         boolean running = true;
 
         while (running) {
@@ -45,6 +49,7 @@ public class UserInterface {
 
                 //Sætter running til false, så while-løkke og program stopper
                 case "0" -> {
+                    saveMovies();
                     running = false;
                     System.out.println("Farvel!");
                 }
@@ -433,6 +438,34 @@ public class UserInterface {
                 return false;
             }
             System.out.println("Svar ja eller nej.");
+        }
+    }
+
+    //Indlæser de gemte film, når programmet starter
+    private void loadMovies() {
+        try {
+            int count = controller.loadMovies();
+            System.out.println(count + " film er indlæst.");
+
+            int skipped = controller.getSkippedLineCount();
+
+            if (skipped > 0) {
+                System.out.println("Advarsel: " + skipped + " linje(r) i filen kunne ikke læses og er sprunget over.");
+            }
+        } catch (FileNotFoundException e) {
+
+            //Hvis filen ikke findes, crasher programmet ikke
+            System.out.println("Der er ingen gemt filmsamling endnu - du starter med en tom samling.");
+        }
+
+    }
+
+    //Gemmer filmsamling i movies.csv
+    private void saveMovies() {
+        try {
+            controller.saveMovies();
+        } catch (FileNotFoundException e) {
+            System.out.println("Filmsamlingen kunne ikke gemmes.");
         }
     }
 }
