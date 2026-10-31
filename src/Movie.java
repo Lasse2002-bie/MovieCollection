@@ -57,9 +57,7 @@ public class Movie {
     }
 
     public void setYearCreated(int yearCreated) {
-        if (yearCreated < FIRST_MOVIE_YEAR || yearCreated > LocalDate.now().getYear()+1) {
-            throw new IllegalArgumentException("Årstallet skal være mellem 1888 og næste år");
-        }
+        validateYearCreated(yearCreated);
         this.yearCreated = yearCreated;
     }
 
@@ -99,13 +97,23 @@ public class Movie {
 
     public boolean hasBeenWatched() {
         return lastWatched != null;
+
     }
 
     public void markAsWatched(LocalDate date) {
+        if(date.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Datoen kan ikke være i fremtiden.");
+        }
         lastWatched = date;
     }
 
     public long getDaysSinceWatched(LocalDate today) {
         return ChronoUnit.DAYS.between(lastWatched, today);
+    }
+
+    public static void validateYearCreated(int yearCreated){
+        if (yearCreated < FIRST_MOVIE_YEAR || yearCreated > LocalDate.now().getYear()+1) {
+            throw new IllegalArgumentException("Årstallet skal være mellem 1888 og næste år");
+        }
     }
 }
