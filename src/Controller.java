@@ -2,10 +2,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.io.FileNotFoundException;
+
 public class Controller {
 
     //Forbindelse til MovieCollection, hvor selve filmsamling ligger
     private MovieCollection movieCollection;
+    private boolean changed = false;
 
     //Opretter en MovieCollection, når Controller bliver oprettet
     public Controller() {
@@ -40,13 +42,22 @@ public class Controller {
                              int yearCreated, boolean inColor,
                              int lengthInMinutes, String genre) {
 
-        return movieCollection.editMovie(movie, title, director, yearCreated,
-                inColor, lengthInMinutes, genre);
+        boolean edited = movieCollection.editMovie(movie, title, director, yearCreated, inColor, lengthInMinutes, genre);
+        if (edited) {
+            changed = true;
+        }
+        return edited;
     }
 
     //Sender filmen videre til MovieCollection som forsøger at slette den
     public boolean deleteMovie(Movie movie) {
-        return movieCollection.deleteMovie(movie);
+        boolean deleted = movieCollection.deleteMovie(movie);  // 1. gem svaret
+
+        if (deleted) {
+            changed = true;
+        }
+
+        return deleted;
     }
 
     public void markAsWatched(Movie movie, LocalDate date) {
@@ -81,8 +92,13 @@ public class Controller {
     }
 
     //Gemmer alle film fra MovieCollection i CSV filen
-    public void saveMovies() throws FileNotFoundException {
-        fileHandler.saveMovies(movieCollection.getMovies());
+    public boolean saveMoviesIfChanged() throws FileNotFoundException {
+        if (changed) {
+            fileHandler.saveMovies(movieCollection.getMovies());
+            changed = false;
+            return true;
+        }
+       return false;
     }
 
     //Tager antal dage og ser hvilke film man har set indenfor det tidsrum.

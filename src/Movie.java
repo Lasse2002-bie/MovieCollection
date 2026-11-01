@@ -105,6 +105,7 @@ public class Movie {
             throw new IllegalArgumentException("Datoen kan ikke være i fremtiden.");
         }
         lastWatched = date;
+        Controller.changed = true;
     }
 
     public long getDaysSinceWatched(LocalDate today) {

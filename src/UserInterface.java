@@ -507,7 +507,12 @@ public class UserInterface {
     //Gemmer filmsamling i movies.csv
     private void saveMovies() {
         try {
-            controller.saveMovies();
+            boolean saved = controller.saveMoviesIfChanged();
+            if (saved) {
+                System.out.println("Filmsamlingen er gemt.");
+            } else {
+                System.out.println("Ingen ændringer – intet at gemme.");
+            }
         } catch (FileNotFoundException e) {
             System.out.println("Filmsamlingen kunne ikke gemmes.");
         }

@@ -19,6 +19,7 @@ public class MovieCollection {
 
         Movie movie = new Movie(title, director, yearCreated, inColor, lengthInMinutes, genre);
         movies.add(movie);
+        Controller.changed = true;
     }
 
 //Returnerer listen af film til Controller, som kan sende den videre til UI
