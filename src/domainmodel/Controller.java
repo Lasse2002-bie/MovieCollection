@@ -1,15 +1,17 @@
+package domainmodel;
+import datasource.FileHandler;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.time.LocalDate;
-import java.io.FileNotFoundException;
 
 public class Controller {
 
-    //Forbindelse til MovieCollection, hvor selve filmsamling ligger
+    //Forbindelse til domainmodel.MovieCollection, hvor selve filmsamling ligger
     private MovieCollection movieCollection;
     private boolean changed = false;
 
-    //Opretter en MovieCollection, når Controller bliver oprettet
+    //Opretter en domainmodel.MovieCollection, når domainmodel.Controller bliver oprettet
     public Controller() {
 
         movieCollection = new MovieCollection();
@@ -18,7 +20,7 @@ public class Controller {
         fileHandler = new FileHandler("movies.csv");
     }
 
-    //Modtager filmens oplysninger fra UI og sender videre til MovieCollection
+    //Modtager filmens oplysninger fra UI og sender videre til domainmodel.MovieCollection
     public void addMovie(String title, String director, int yearCreated,
                          boolean inColor, int lengthInMinutes, String genre) {
 
@@ -27,17 +29,17 @@ public class Controller {
         changed = true;
     }
 
-    //Henter listen af film fra MovieCollection og sender videre til UI
+    //Henter listen af film fra domainmodel.MovieCollection og sender videre til UI
     public ArrayList<Movie> getMovies() {
         return movieCollection.getMovies();
     }
 
-    //Sender søgeteksten videre til MovieCollection og returnerer de film der matcher
+    //Sender søgeteksten videre til domainmodel.MovieCollection og returnerer de film der matcher
     public ArrayList<Movie> searchMovies(String searchText) {
         return movieCollection.searchMovies(searchText);
     }
 
-    //Sender den valgte film og de nye oplysninger videre til MovieCollection
+    //Sender den valgte film og de nye oplysninger videre til domainmodel.MovieCollection
     //Returnerer true eller false alt efter om redigeringen virkede
     public boolean editMovie(Movie movie, String title, String director,
                              int yearCreated, boolean inColor,
@@ -50,7 +52,7 @@ public class Controller {
         return edited;
     }
 
-    //Sender filmen videre til MovieCollection som forsøger at slette den
+    //Sender filmen videre til domainmodel.MovieCollection som forsøger at slette den
     public boolean deleteMovie(Movie movie) {
         boolean deleted = movieCollection.deleteMovie(movie);  // 1. gem svaret
 
@@ -80,7 +82,7 @@ public class Controller {
         //henter de indlæste film fra fileHandler
         ArrayList<Movie> loadedMovies = fileHandler.loadMovies();
 
-        //Tilføjer alle indlæste film til MovieCollection
+        //Tilføjer alle indlæste film til domainmodel.MovieCollection
         for (Movie movie : loadedMovies) {
             movieCollection.addMovie(movie);
         }
@@ -88,12 +90,12 @@ public class Controller {
         return loadedMovies.size();
     }
 
-    //Henter antal ugyldige linjer fra FileHandler
+    //Henter antal ugyldige linjer fra datasource.FileHandler
     public int getSkippedLineCount() {
         return fileHandler.getSkippedLineCount();
     }
 
-    //Gemmer alle film fra MovieCollection i CSV filen
+    //Gemmer alle film fra domainmodel.MovieCollection i CSV filen
     public boolean saveMoviesIfChanged() throws FileNotFoundException {
         if (changed) {
             fileHandler.saveMovies(movieCollection.getMovies());

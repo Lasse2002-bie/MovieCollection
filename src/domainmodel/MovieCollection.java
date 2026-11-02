@@ -1,19 +1,21 @@
+package domainmodel;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-//MovieCollection ejer selve listen med film. Det er altså her filmene faktisk bliver oprettet, fundet, ændret og slettet.
+//domainmodel.MovieCollection ejer selve listen med film. Det er altså her filmene faktisk bliver oprettet, fundet, ændret og slettet.
 
 public class MovieCollection {
 
-    //Listen der gemmer alle Movie-objekter i filmsamlingen
+    //Listen der gemmer alle domainmodel.Movie-objekter i filmsamlingen
     private ArrayList<Movie> movies;
 
-    //Opretter en tom Arraylist, når en MovieCollection bliver lavet
+    //Opretter en tom Arraylist, når en domainmodel.MovieCollection bliver lavet
     public MovieCollection() {
         movies = new ArrayList<>();
     }
-// Modtager filmens oplysninger fra controller og opretter et nyt Movie-objekt
-    //Det nye Movie-objekt bliver derefter gemt i Arraylist
+// Modtager filmens oplysninger fra controller og opretter et nyt domainmodel.Movie-objekt
+    //Det nye domainmodel.Movie-objekt bliver derefter gemt i Arraylist
     public void addMovie(String title, String director, int yearCreated, boolean inColor,
                          int lengthInMinutes, String genre) {
 
@@ -22,7 +24,7 @@ public class MovieCollection {
 
     }
 
-//Returnerer listen af film til Controller, som kan sende den videre til UI
+//Returnerer listen af film til domainmodel.Controller, som kan sende den videre til UI
     public ArrayList<Movie> getMovies() {
         return movies;
     }
@@ -44,11 +46,11 @@ public class MovieCollection {
             }
         }
 
-        //Sender listen med søgeresultater til Controller
+        //Sender listen med søgeresultater til domainmodel.Controller
         return matches;
     }
 
-    //Modtager den valgte film og de nye oplysninger fra Controller
+    //Modtager den valgte film og de nye oplysninger fra domainmodel.Controller
     //Hvis filmen findes i samlingen, ændres dens værdier gennem setter
     public boolean editMovie(Movie movie, String title, String director, int yearCreated,
                              boolean inColor, int lengthInMinutes, String genre) {
@@ -70,7 +72,7 @@ public class MovieCollection {
         return false;
     }
 
-    //Fjerner den valgte Movie-objekt fra listen og returnerer om det virkede
+    //Fjerner den valgte domainmodel.Movie-objekt fra listen og returnerer om det virkede
     public boolean deleteMovie(Movie movie) {
         return movies.remove(movie);
         // TODO US6
@@ -86,7 +88,7 @@ public class MovieCollection {
         return result;
     }
 
-    //Tilføjer en allerede oprettet Movie til samlingen
+    //Tilføjer en allerede oprettet domainmodel.Movie til samlingen
     public void addMovie (Movie movie) {
         movies.add(movie);
     }

@@ -1,3 +1,7 @@
+package datasource;
+
+import domainmodel.Movie;
+
 import java.io.File; //gør det muligt at arbejde med en film
 import java.io.FileNotFoundException; //Exception hvis filen ikke kan findes
 import java.io.PrintStream;
@@ -90,7 +94,7 @@ public class FileHandler {
                     movie.markAsWatched(LocalDate.parse(fields[6]));
                 }
 
-                //Returnerer den færdige Movie
+                //Returnerer den færdige domainmodel.Movie
                 return movie;
             } catch (IllegalArgumentException e) {
                 //Hvis noget i linjen er ugyldigt returnerer vi null

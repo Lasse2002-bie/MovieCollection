@@ -1,3 +1,7 @@
+package ui;
+import domainmodel.Controller;
+import domainmodel.Movie;
+
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,7 +14,7 @@ public class UserInterface {
     //Scanner bruges til at læse brugeres input
     private Scanner scanner;
 
-    //Controller forbinder UI med resten af programmet.
+    //domainmodel.Controller forbinder UI med resten af programmet.
     private Controller controller;
 
     //Formatterer dato input fra brugeren.
@@ -96,8 +100,8 @@ public class UserInterface {
         System.out.println("Genre: ");
         String genre = scanner.nextLine();
 
-        //Sender alle oplysninger videre til Controller, som sender dem til MovieCollection
-        //MovieCollection opretter Movie-objektet og gemmer det i listen
+        //Sender alle oplysninger videre til domainmodel.Controller, som sender dem til domainmodel.MovieCollection
+        //domainmodel.MovieCollection opretter domainmodel.Movie-objektet og gemmer det i listen
         try {
             controller.addMovie(title, director, yearCreated, inColor, lengthInMinutes, genre);
             System.out.println(title + " er tilføjet til filmsamlingen");
@@ -106,7 +110,7 @@ public class UserInterface {
         }
     }
 
-    //Henter alle film gennem Controller
+    //Henter alle film gennem domainmodel.Controller
     private void showAllMovies() {
         ArrayList<Movie> movies = controller.getMovies();
 
@@ -141,12 +145,12 @@ public class UserInterface {
         }
     }
 
-    //Læser en søgetekst og sender den gennem Controller til MovieCollection
+    //Læser en søgetekst og sender den gennem domainmodel.Controller til domainmodel.MovieCollection
     private void searchMovies() {
         System.out.println("Søg efter titel: ");
         String searchText = scanner.nextLine();
 
-        //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
+        //Gemmer de film som domainmodel.MovieCollection fandt og sendte tilbage gennem domainmodel.Controller
         ArrayList<Movie> matches = controller.searchMovies(searchText);
 
         if (matches.isEmpty()) {
@@ -184,7 +188,7 @@ public class UserInterface {
         System.out.println("Søg efter filmen du vil redigere");
         String searchText = scanner.nextLine();
 
-        //Søger efter filmen gennem Controller og gemmer resultaterne
+        //Søger efter filmen gennem domainmodel.Controller og gemmer resultaterne
         ArrayList<Movie> matches = controller.searchMovies(searchText);
 
         if (matches.isEmpty()) {
@@ -240,8 +244,8 @@ public class UserInterface {
             newGenre = selectedMovie.getGenre();
         }
 
-        //Sender den valgte film og de nye værdier til Controller
-        //Controller sender dem videre til MovieCollection, som ændrer Movie-objektet
+        //Sender den valgte film og de nye værdier til domainmodel.Controller
+        //domainmodel.Controller sender dem videre til domainmodel.MovieCollection, som ændrer domainmodel.Movie-objektet
         try {
             controller.editMovie(
                     selectedMovie,
@@ -281,7 +285,7 @@ public class UserInterface {
 
     }
 
-    //Søger efter filmen der skal slettes gennem Controller
+    //Søger efter filmen der skal slettes gennem domainmodel.Controller
     private void deleteMovie() {
         System.out.println("Søg efter filmen du vil slette ");
         String searchText = scanner.nextLine();
@@ -314,7 +318,7 @@ public class UserInterface {
         boolean confirm = readYesNo("Vil du slette " + selectedMovie.getTitle() + "? (ja/nej): ");
 
         if (confirm) {
-            //Controller sender Movie-objekt videre til MovieCollection,
+            //domainmodel.Controller sender domainmodel.Movie-objekt videre til domainmodel.MovieCollection,
             //Som fjerner det fra Arraylisten
             controller.deleteMovie(selectedMovie);
 
@@ -359,7 +363,7 @@ public class UserInterface {
                      LocalDate date = readDate("Hvornår så du den? (dd-mm-åååå, Enter = i dag): ");
 
                      try {
-                         // Sender filmen til Controller, som markerer den som set i den valgte dato.
+                         // Sender filmen til domainmodel.Controller, som markerer den som set i den valgte dato.
                          controller.markAsWatched(selectedMovie, date);
 
                          System.out.println(selectedMovie.getTitle() + " er markeret som set den: " + date.format(dateFormatter));
@@ -374,7 +378,7 @@ public class UserInterface {
 
         int days = readInt("Antal dage: ");
 
-        //Gemmer de film som MovieCollection fandt og sendte tilbage gennem Controller
+        //Gemmer de film som domainmodel.MovieCollection fandt og sendte tilbage gennem domainmodel.Controller
         ArrayList<Movie> matches = controller.getMoviesNotWatchedForDays(days);
 
 

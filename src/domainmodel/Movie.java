@@ -1,3 +1,5 @@
+package domainmodel;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -15,7 +17,7 @@ public class Movie {
     private LocalDate lastWatched;
 
 
-    //Constructor der opretter et Movie-objekt med alle filmens oplysninger
+    //Constructor der opretter et domainmodel.Movie-objekt med alle filmens oplysninger
     public Movie(String title, String director, int yearCreated, boolean inColor,
                  int lengthInMinutes, String genre) {
 
@@ -86,7 +88,7 @@ public class Movie {
 
     public void setGenre(String genre) {
         if (genre == null || genre.trim().isEmpty()) {
-            throw new IllegalArgumentException("Genre må ikke være tom");
+            throw new IllegalArgumentException("domainmodel.Genre må ikke være tom");
         }
         this.genre = genre;
     }
