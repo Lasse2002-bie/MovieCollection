@@ -24,6 +24,7 @@ public class Controller {
 
         movieCollection.addMovie(title, director, yearCreated,
                 inColor, lengthInMinutes, genre);
+        changed = true;
     }
 
     //Henter listen af film fra MovieCollection og sender videre til UI
@@ -62,6 +63,7 @@ public class Controller {
 
     public void markAsWatched(Movie movie, LocalDate date) {
         movie.markAsWatched(date);
+        changed = true;
 
     }
 
