@@ -112,7 +112,7 @@ public class UserInterface {
 
     //Henter alle film gennem domainmodel.Controller
     private void showAllMovies() {
-        ArrayList<Movie> movies = controller.getMovies();
+        ArrayList<Movie> movies = controller.getMoviesSortedByTitle();
 
         //Stopper metoden hvis filmsamlingen er tom
         if (movies.isEmpty()) {

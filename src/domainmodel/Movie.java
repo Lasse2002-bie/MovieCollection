@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 
-public class Movie {
+public class Movie implements Comparable<Movie> {
     private static final int FIRST_MOVIE_YEAR = 1888;
 
     //Variabler der gemmer oplysninger om én film
@@ -88,7 +88,7 @@ public class Movie {
 
     public void setGenre(String genre) {
         if (genre == null || genre.trim().isEmpty()) {
-            throw new IllegalArgumentException("domainmodel.Genre må ikke være tom");
+            throw new IllegalArgumentException("Genre må ikke være tom");
         }
         this.genre = genre;
     }
@@ -118,5 +118,10 @@ public class Movie {
         if (yearCreated < FIRST_MOVIE_YEAR || yearCreated > LocalDate.now().getYear()+1) {
             throw new IllegalArgumentException("Årstallet skal være mellem 1888 og næste år");
         }
+    }
+
+    @Override
+    public int compareTo(Movie other) {
+        return title.compareToIgnoreCase(other.title);
     }
 }

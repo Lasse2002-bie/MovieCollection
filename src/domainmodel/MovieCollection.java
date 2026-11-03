@@ -2,6 +2,8 @@ package domainmodel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+
 
 //domainmodel.MovieCollection ejer selve listen med film. Det er altså her filmene faktisk bliver oprettet, fundet, ændret og slettet.
 
@@ -91,6 +93,14 @@ public class MovieCollection {
     //Tilføjer en allerede oprettet domainmodel.Movie til samlingen
     public void addMovie (Movie movie) {
         movies.add(movie);
+    }
+
+    //Returnerer en kopi af filmene sorteret alfabetisk efter title
+    public ArrayList<Movie> getMoviesSortedByTitle() {
+        ArrayList<Movie> sorted = new ArrayList<>(movies);
+        //Java sorterer kopien og bruger den compareTo()-metode, vi lavede i Movie.
+        Collections.sort(sorted);
+        return sorted;
     }
 
 }

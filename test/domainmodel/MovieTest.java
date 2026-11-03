@@ -113,4 +113,14 @@ public class MovieTest {
 
     }
 
+    //Test us 16 & 17
+    //Test 1
+    @Test
+    void compareToSortsByTitle() {
+        Movie avatar = new Movie("Avatar", "James Cameron", 2009, true, 162, "Action");
+        Movie batman = new Movie("Batman", "Christopher Nolan", 2008, true, 152, "Action");
+
+        assertTrue(avatar.compareTo(batman) < 0);
+    }
+
 }

@@ -111,4 +111,8 @@ public class Controller {
         return movieCollection.getMoviesNotWatchedSince(limit);
 
     }
+
+    public ArrayList<Movie> getMoviesSortedByTitle() {
+        return movieCollection.getMoviesSortedByTitle();
+    }
 }
