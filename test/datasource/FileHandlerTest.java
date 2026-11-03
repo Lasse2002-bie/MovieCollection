@@ -3,7 +3,9 @@ package datasource;
 import domainmodel.Movie;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -75,5 +77,25 @@ public class FileHandlerTest {
         });
     }
 
+    //Test - ugyldige linjer i CSV filen springes over
+    @Test
+    void loadFileWithCorruptedLines() throws FileNotFoundException {
+        PrintStream output = new PrintStream(new File("test-movies.csv"));
 
+
+        output.println("title;director;yearCreated;inColor;lengthInMinutes;genre;lastWatched");
+        output.println("Jaws;Steven Spielberg;1975;true;124;Thriller;2025-10-30");
+        output.println("Batman;Christopher Nolan;forkert;true;152;Action;");
+        output.println("Dårlig film;Test");
+
+        output.close();
+
+        FileHandler fileHandler = new FileHandler("test-movies.csv");
+
+        ArrayList<Movie> loadedMovies = fileHandler.loadMovies();
+
+        assertEquals(1, loadedMovies.size());
+        assertEquals("Jaws", loadedMovies.get(0).getTitle());
+        assertEquals(2, fileHandler.getSkippedLineCount());
+    }
 }
