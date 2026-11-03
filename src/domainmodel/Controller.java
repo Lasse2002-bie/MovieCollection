@@ -4,6 +4,7 @@ import datasource.FileHandler;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.Comparator;
 
 public class Controller {
 
@@ -102,7 +103,7 @@ public class Controller {
             changed = false;
             return true;
         }
-       return false;
+        return false;
     }
 
     //Tager antal dage og ser hvilke film man har set indenfor det tidsrum.
@@ -114,5 +115,20 @@ public class Controller {
 
     public ArrayList<Movie> getMoviesSortedByTitle() {
         return movieCollection.getMoviesSortedByTitle();
+    }
+
+    private Comparator<Movie> comparatorFor(SortField field) {
+        return switch (field) {
+            case TITLE -> new TitleComparator();
+            case DIRECTOR -> new DirectorComparator();
+            case LENGTH -> new LengthComparator();
+            case GENRE -> new GenreComparator();
+            case YEAR -> new YearComparator();
+
+        };
+    }
+
+    public ArrayList<Movie> getMoviesSortedBy(SortField field) {
+        return movieCollection.getMoviesSorted(comparatorFor(field));
     }
 }

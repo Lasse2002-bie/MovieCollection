@@ -3,6 +3,7 @@ package domainmodel;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 //domainmodel.MovieCollection ejer selve listen med film. Det er altså her filmene faktisk bliver oprettet, fundet, ændret og slettet.
@@ -100,6 +101,12 @@ public class MovieCollection {
         ArrayList<Movie> sorted = new ArrayList<>(movies);
         //Java sorterer kopien og bruger den compareTo()-metode, vi lavede i Movie.
         Collections.sort(sorted);
+        return sorted;
+    }
+
+    public ArrayList<Movie> getMoviesSorted(Comparator<Movie> comparator) {
+        ArrayList<Movie> sorted = new ArrayList<>(movies);
+        sorted.sort(comparator);
         return sorted;
     }
 

@@ -1,6 +1,7 @@
 package ui;
 import domainmodel.Controller;
 import domainmodel.Movie;
+import domainmodel.SortField;
 
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +42,7 @@ public class UserInterface {
             System.out.println("5. Slet en film");
             System.out.println("6. Markér en film som set");
             System.out.println("7. Find film du ikke har set i et vist antal dage");
+            System.out.println("8. Vis film sorteret efter:")
             System.out.println("0. Afslut");
             System.out.println("Vælg: ");
 
@@ -55,6 +57,7 @@ public class UserInterface {
                 case "5" -> deleteMovie();
                 case "6" -> markMovieAsWatched();
                 case "7" -> getMoviesNotWatchedForDays();
+                case "8" -> sortMovies();
 
                 //Sætter running til false, så while-løkke og program stopper
                 case "0" -> {
@@ -80,16 +83,15 @@ public class UserInterface {
         //parseInt omdanner brugeres tekst-input til et int
         int yearCreated = 0;
         boolean validInput = false;
-        while (!validInput){
+        while (!validInput) {
             yearCreated = readInt("Year Created: ");
             try {
-                  Movie.validateYearCreated(yearCreated);
-                  validInput=true;
+                Movie.validateYearCreated(yearCreated);
+                validInput = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + " Prøv igen.");
             }
-            catch(IllegalArgumentException e){
-               System.out.println(e.getMessage() + " Prøv igen.");
-            }
-             
+
 
         }
 
@@ -109,7 +111,30 @@ public class UserInterface {
             System.out.println("Filmen blev ikke oprettet: " + e.getMessage());
         }
     }
+    private void printMovies(ArrayList<Movie> movies) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+        for (Movie movie : movies) {
+            System.out.println(movie.getTitle());
+            System.out.println(movie.getDirector());
+            System.out.println(movie.getYearCreated());
+            System.out.println(movie.getGenre());
+            System.out.println(movie.getLengthInMinutes());
+
+            if (movie.isInColor()) {
+                System.out.println("farver");
+            } else {
+                System.out.println("sort-hvid");
+            }
+
+            if (movie.hasBeenWatched()) {
+                long days = controller.getDaysSinceWatched(movie);
+                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter) + " (for " + days + " dage siden)");
+            } else {
+                System.out.println("Sidst set: aldrig");
+            }
+        }
+    }
     //Henter alle film gennem domainmodel.Controller
     private void showAllMovies() {
         ArrayList<Movie> movies = controller.getMoviesSortedByTitle();
@@ -120,29 +145,7 @@ public class UserInterface {
             return;
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        //Går gennem alle film i listen og viser oplysningerne om hver film
-        for (Movie movie : movies) {
-            System.out.println(movie.getTitle());
-            System.out.println(movie.getDirector());
-            System.out.println(movie.getYearCreated());
-            System.out.println(movie.getGenre());
-            System.out.println(movie.getLengthInMinutes());
-
-            //Viser boolean-værdien som farver eller sort-hvis i stedet for true/false
-            if (movie.isInColor()) {
-                System.out.println("farver");
-            } else {
-                System.out.println("sort-hvid");
-            }
-            if (movie.hasBeenWatched()) {
-                long days = controller.getDaysSinceWatched(movie);
-                System.out.println("Sidst set: " + movie.getLastWatched().format(formatter) + " (for " + days + " dage siden)");
-
-            } else {
-                System.out.println("Sidst set: aldrig");
-            }
-        }
+        printMovies(movies);   // kald den nye metode
     }
 
     //Læser en søgetekst og sender den gennem domainmodel.Controller til domainmodel.MovieCollection
@@ -357,21 +360,21 @@ public class UserInterface {
 
         // Henter den film brugeren valgte
         Movie selectedMovie = matches.get(number - 1);
-         boolean validDate = false;
+        boolean validDate = false;
 
-                 while(!validDate) {
-                     LocalDate date = readDate("Hvornår så du den? (dd-mm-åååå, Enter = i dag): ");
+        while (!validDate) {
+            LocalDate date = readDate("Hvornår så du den? (dd-mm-åååå, Enter = i dag): ");
 
-                     try {
-                         // Sender filmen til domainmodel.Controller, som markerer den som set i den valgte dato.
-                         controller.markAsWatched(selectedMovie, date);
+            try {
+                // Sender filmen til domainmodel.Controller, som markerer den som set i den valgte dato.
+                controller.markAsWatched(selectedMovie, date);
 
-                         System.out.println(selectedMovie.getTitle() + " er markeret som set den: " + date.format(dateFormatter));
-                         validDate = true;
-                     } catch (IllegalArgumentException e) {
-                         System.out.println("Filmen blev ikke markeret: " + e.getMessage() + " Prøv igen.");
-                     }
-                 }
+                System.out.println(selectedMovie.getTitle() + " er markeret som set den: " + date.format(dateFormatter));
+                validDate = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Filmen blev ikke markeret: " + e.getMessage() + " Prøv igen.");
+            }
+        }
     }
 
     private void getMoviesNotWatchedForDays() {
@@ -521,4 +524,38 @@ public class UserInterface {
             System.out.println("Filmsamlingen kunne ikke gemmes.");
         }
     }
+
+
+    private void sortMovies() {
+        SortField[] fields = SortField.values();
+        String[] names = {"titel", "instruktør", "årstal", "længde", "genre"};
+
+        // 1. Vis listen
+        System.out.println("Sortér efter:");
+        for (int i = 0; i < fields.length; i++) {
+            System.out.println("  " + (i+i) + ". " + names[i]);
+        }
+
+        // 2. Læs valget og lav det om til et tal
+        System.out.println("Vælg: ");
+        try {
+            int choice = Integer.parseInt(scanner.nextLine().trim());
+
+            // 3. Tjek at tallet er gyldigt
+            if (choice < 1 || choice > 5) {
+                System.out.println("Ugyldigt valg");
+                return;
+            }
+
+            // 4. Find det rigtige SortField og sortér
+            SortField field = fields[choice-1];
+            ArrayList<Movie> sorted = controller.getMoviesSortedBy(field);
+            printMovies(sorted);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Du skal skrive et tal");
+        }
+    }
+
 }
+
