@@ -123,4 +123,70 @@ public class MovieTest {
         assertTrue(avatar.compareTo(batman) < 0);
     }
 
+    //Dato test 1 - en ny film er ikke set
+    @Test
+    void newMovieHasNotBeenWatched() {
+        Movie movie = new Movie("Batman", "Christopher Nolan", 2008, true, 152, "Action");
+
+        assertFalse(movie.hasBeenWatched());
+        assertNull(movie.getLastWatched());
+
+    }
+
+    //Dato test 2 - markAsWatched husker datoen
+    @Test
+    void MarkAsWatchedRemembersDate() {
+        Movie movie = new Movie("Batman", "Christopher Nolan", 2008, true, 152, "Action");
+
+        LocalDate date = LocalDate.of(2025,10,20);
+
+        movie.markAsWatched(date);
+
+        assertEquals(date, movie.getLastWatched());
+
+    }
+
+    //Dato test 3 - antal dage regnes korrekt over månedsskifte
+    @Test
+    void daysSinceWatchedCountsAcrossMonths() {
+        Movie movie = new Movie("Jaws", "Steven Spielberg", 1975, true, 124, "Thriller");
+
+        movie.markAsWatched(LocalDate.of(2025,9,30));
+
+        long days = movie.getDaysSinceWatched(LocalDate.of(2025,10,26));
+
+        assertEquals(26, days);
+    }
+
+    // Test markAsWatched afviser en dato i fremtiden
+    @Test
+    void futureWatchDateIsRejected() {
+        Movie movie = new Movie ("Batman", "Christopher Nolan", 2008, true, 152, "Action");
+
+        LocalDate futureDate = LocalDate.now().plusDays(1);
+
+        assertThrows(IllegalArgumentException.class,() -> movie.markAsWatched(futureDate));
+    }
+
+    // Test constructoren sætter alle filmens oplysninger korrekt
+    @Test
+    void constructorSetsAllAttributes() {
+        Movie movie = new Movie ("Jaws", "Steven Spielberg", 1975, true, 124, "Thriller");
+
+        assertEquals("Jaws", movie.getTitle());
+        assertEquals("Steven Spielberg", movie.getDirector());
+        assertEquals(1975, movie.getYearCreated());
+        assertTrue(movie.isInColor());
+        assertEquals(124, movie.getLengthInMinutes());
+        assertEquals("Thriller", movie.getGenre());
+    }
+
+    // Test - setTitle ændrer filmens title
+    @Test
+    void SetTitleChangesTitle() {
+        Movie movie = new Movie ("Jaws", "Steven Spielberg", 1975, true, 124, "Thriller");
+
+        movie.setTitle("Jaws 2");
+        assertEquals("Jaws 2", movie.getTitle());
+    }
 }
