@@ -464,6 +464,11 @@ public class UserInterface {
             System.out.println(prompt);
             String input = scanner.nextLine().trim();
 
+            // Hvis brugeren trykker Enter, behold den gamle værdi
+            if (input.isEmpty()) {
+                return oldValue;
+            }
+
             try {
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
