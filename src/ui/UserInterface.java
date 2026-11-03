@@ -42,7 +42,7 @@ public class UserInterface {
             System.out.println("5. Slet en film");
             System.out.println("6. Markér en film som set");
             System.out.println("7. Find film du ikke har set i et vist antal dage");
-            System.out.println("8. Vis film sorteret efter:")
+            System.out.println("8. Vis film sorteret efter:");
             System.out.println("0. Afslut");
             System.out.println("Vælg: ");
 
@@ -533,7 +533,7 @@ public class UserInterface {
         // 1. Vis listen
         System.out.println("Sortér efter:");
         for (int i = 0; i < fields.length; i++) {
-            System.out.println("  " + (i+i) + ". " + names[i]);
+            System.out.println("  " + (i+1) + ". " + names[i]);
         }
 
         // 2. Læs valget og lav det om til et tal
