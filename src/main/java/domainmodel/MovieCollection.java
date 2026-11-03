@@ -59,7 +59,7 @@ public class MovieCollection {
                              boolean inColor, int lengthInMinutes, String genre) {
 
         if (movies.contains(movie)) {
-            Movie tempMovie = new Movie (title, director, yearCreated, inColor, lengthInMinutes, genre);
+            new Movie (title, director, yearCreated, inColor, lengthInMinutes, genre);
             movie.setTitle(title);
             movie.setDirector(director);
             movie.setYearCreated(yearCreated);
@@ -78,7 +78,7 @@ public class MovieCollection {
     //Fjerner den valgte domainmodel.Movie-objekt fra listen og returnerer om det virkede
     public boolean deleteMovie(Movie movie) {
         return movies.remove(movie);
-        // TODO US6
+
     }
     //Laver en liste af Movies, som ikke er set endnu.
     public ArrayList<Movie> getMoviesNotWatchedSince(LocalDate date)
